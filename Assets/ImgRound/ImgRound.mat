@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Border: 0.04
+    - _Border: 0.005
     - _BumpScale: 1
     - _ColorMask: 15
     - _Cutoff: 0.5
@@ -69,8 +69,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Progress: 0.786
-    - _Radius: 0.31
+    - _Progress: 0.73
+    - _Radius: 0.34
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

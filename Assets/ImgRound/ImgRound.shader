@@ -19,7 +19,6 @@ Shader "Custom/ImgRound"
 
         _Radius ("Radius", Float) = 0.5
         _Border ("Border", Float) = 0.01
-        _Progress ("Progress", Range(0,1)) = 0.1
         _BorderColor ("BorderColor", Color) = (1,1,1,1)
 
 
@@ -90,7 +89,6 @@ Shader "Custom/ImgRound"
             float4 _MainTex_ST;
             float _Radius;
             float _Border;
-            float _Progress;
             fixed4 _BorderColor;
 
 
@@ -120,11 +118,6 @@ Shader "Custom/ImgRound"
                 clip (color.a - 0.001);
                 #endif
 
-                // 判断距离中心点距离
-                // if(distance(IN.texcoord, float2(0.5,0.5)) >= _Radius) 
-                // {
-                //     color.a =0;
-                // }      
 
                 //smoothstep实现边缘平滑
                 color.a = smoothstep(_Radius + _Border, _Radius, length(IN.texcoord - float2(0.5, 0.5)));
