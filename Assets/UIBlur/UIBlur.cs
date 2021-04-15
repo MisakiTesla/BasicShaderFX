@@ -16,12 +16,23 @@ public class UIBlur : MonoBehaviour
     public float interpolation = 1f;
     public Material blurMaterial;
     private static readonly int _Radius = Shader.PropertyToID("_Radius");
-    private void OnEnable()
+    private RenderTexture rt;
+
+    public void Refresh()
     {
+        rawImage.enabled = false;
         // 创建一个RenderTexture对象  
-        //var rt = new RenderTexture((int)Screen.width>> downSample, (int)Screen.height>> downSample, 0);
+        // NPOT
+        //rt = new RenderTexture((int)Screen.width>> downSample, (int)Screen.height>> downSample, 24, RenderTextureFormat.ARGB32);
+        // 非NPOT
+        if (!rt)
+        {
+            rt = new RenderTexture((int) Screen.width / (downSample + 1), (int) Screen.height / (downSample + 1), 24, RenderTextureFormat.ARGB32);
+        }
+        
         //尽量用GetTemporary
-        var rt = RenderTexture.GetTemporary(Screen.width>> downSample, Screen.height>> downSample, 24, RenderTextureFormat.Default);
+        //rt = RenderTexture.GetTemporary(Screen.width>> downSample, Screen.height>> downSample, 24, RenderTextureFormat.Default);
+        //rt = RenderTexture.GetTemporary(Screen.width / (downSample + 1), Screen.height / (downSample + 1), 24, RenderTextureFormat.Default);
 
         // 临时设置相关相机的targetTexture为rt, 并手动渲染相关相机  
         uiCamera.targetTexture = rt;
@@ -30,7 +41,12 @@ public class UIBlur : MonoBehaviour
         uiCamera.targetTexture = null;
         ProcessRT(rt, null);
         rawImage.texture = rt;
+        rawImage.enabled = true;
+    }
 
+    private void OnDestroy()
+    {
+        rt.DiscardContents();
     }
 
     private void ProcessRT(RenderTexture source, RenderTexture destination)
@@ -93,5 +109,13 @@ public class UIBlur : MonoBehaviour
         Debug.Log(string.Format("截屏了一张照片: {0}", filename));  
 
         return screenShot;  
+    }
+
+    private void OnGUI()
+    {
+        if (GUI.Button(new Rect(300, 100, 200, 100), "Refresh"))
+        {
+            Refresh();
+        }
     }
 }
